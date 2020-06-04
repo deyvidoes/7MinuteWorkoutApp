@@ -8,10 +8,13 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.deyvitineo.a7minuteworkout.adapters.ExerciseStatusAdapter
 import com.deyvitineo.a7minuteworkout.util.Constants
 import com.deyvitineo.a7minuteworkout.util.Exercises
 import kotlinx.android.synthetic.main.activity_exercise.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
@@ -27,6 +30,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private val TAG: String? = ExerciseActivity::class.simpleName
     private var mPlayer: MediaPlayer? = null
 
+    private lateinit var mExerciseAdapter: ExerciseStatusAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +45,9 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         textToSpeech = TextToSpeech(this, this)
         mExerciseList = Exercises.defaultExerciseList()
+        setupRecyclerView()
         setupRestView()
+
     }
 
 
@@ -82,6 +89,9 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             override fun onFinish() {
                 ll_rest_view.visibility = View.GONE
                 ll_exercise_view.visibility = View.VISIBLE
+
+                mExerciseList!![mCurrentExercisePosition].isSelected = true
+                mExerciseAdapter.notifyDataSetChanged()
                 setupExerciseView()
 
             }
@@ -108,6 +118,10 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
             override fun onFinish() {
                 if (mCurrentExercisePosition < mExerciseList!!.size - 1) {
+                    mExerciseList!![mCurrentExercisePosition].isSelected = false
+                    mExerciseList!![mCurrentExercisePosition].isCompleted = true
+                    mExerciseAdapter.notifyDataSetChanged()
+
                     ll_rest_view.visibility = View.VISIBLE
                     ll_exercise_view.visibility = View.GONE
                     setupRestView()
@@ -144,6 +158,12 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         } else {
             Log.w(TAG, "onInit: Something went wrong. STATUS -> $status")
         }
+    }
+
+    private fun setupRecyclerView(){
+        rv_exercise_status.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        mExerciseAdapter = ExerciseStatusAdapter(mExerciseList!!, this)
+        rv_exercise_status.adapter = mExerciseAdapter
     }
 
     override fun onDestroy() {
