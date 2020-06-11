@@ -1,5 +1,6 @@
 package com.deyvitineo.a7minuteworkout
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -126,8 +127,9 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     ll_exercise_view.visibility = View.GONE
                     setupRestView()
                 } else {
-                    Toast.makeText(this@ExerciseActivity, "Exercises finished", Toast.LENGTH_SHORT)
-                        .show()
+                    val intent = Intent(this@ExerciseActivity, FinishActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
             }
         }.start()
