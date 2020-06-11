@@ -11,10 +11,7 @@ class FinishActivity : AppCompatActivity() {
         setContentView(R.layout.activity_finish)
 
         setSupportActionBar(toolbarFinishActivity)
-
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true) //set back button
-        }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         toolbarFinishActivity.setNavigationOnClickListener {
             onBackPressed()

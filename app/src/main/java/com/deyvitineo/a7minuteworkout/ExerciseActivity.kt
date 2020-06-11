@@ -75,7 +75,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         mCurrentExercisePosition++
         rest_progress_bar.progress = restProgress
         rest_progress_bar.max = (Constants.REST_HARD / Constants.SECOND_IN_MILLIS).toInt()
-        var exerciseName = "Get ready for : ${mExerciseList!![mCurrentExercisePosition].name}"
+        var exerciseName = "Get ready for : \n ${mExerciseList!![mCurrentExercisePosition].name}"
         tv_rest_exercise_name.text = exerciseName
         speak(exerciseName)
 
