@@ -1,5 +1,6 @@
 package com.deyvitineo.a7minuteworkout
 
+import android.app.Dialog
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -14,8 +15,8 @@ import com.deyvitineo.a7minuteworkout.adapters.ExerciseStatusAdapter
 import com.deyvitineo.a7minuteworkout.util.Constants
 import com.deyvitineo.a7minuteworkout.util.Exercises
 import kotlinx.android.synthetic.main.activity_exercise.*
+import kotlinx.android.synthetic.main.cancel_exercise_dialog.*
 import java.util.*
-import kotlin.collections.ArrayList
 
 class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
@@ -41,7 +42,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         setSupportActionBar(toolbar_exercise_activity)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar_exercise_activity.setNavigationOnClickListener {
-            onBackPressed()
+            customDialogForBackButton()
         }
 
         textToSpeech = TextToSpeech(this, this)
@@ -162,10 +163,25 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
     }
 
-    private fun setupRecyclerView(){
-        rv_exercise_status.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+    private fun setupRecyclerView() {
+        rv_exercise_status.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         mExerciseAdapter = ExerciseStatusAdapter(mExerciseList!!, this)
         rv_exercise_status.adapter = mExerciseAdapter
+    }
+
+    private fun customDialogForBackButton() {
+        val customDialog = Dialog(this)
+
+        customDialog.setContentView(R.layout.cancel_exercise_dialog)
+        customDialog.btnYes.setOnClickListener {
+            finish()
+            customDialog.dismiss()
+        }
+        customDialog.btnNo.setOnClickListener {
+            customDialog.dismiss()
+        }
+        customDialog.show()
     }
 
     override fun onDestroy() {
